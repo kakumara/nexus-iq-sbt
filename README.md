@@ -19,5 +19,5 @@ docker network create -d bridge --subnet 192.168.0.0/24 --gateway 192.168.0.1 do
 
 The container can now access the host machine using 192.168.0.1 IP address. Here is a complete example of how the evaluation call (assuming your local IQ server has an application named scala-app)
 ```shell
-docker run -it --net=dockernet  sonatype/nexus-iq-sbt /app/nexus-iq-sbt.sh https://github.com/Kambius/simple-app.git http://192.168.0.1:8070/ scala-app
+docker run -it --net=dockernet  sonatype/nexus-iq-sbt /app/nexus-iq-sbt.sh https://github.com/Kambius/simple-app.git http://192.168.0.1:8070/ scala-app admin admin123 build
 ```
