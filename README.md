@@ -2,6 +2,7 @@
 Simplified Nexus IQ policy evaluator for Scala/sbt projects
 
 ## Generating local image
+Clone this project in to your local machine and run the following 
 ```shell
 docker build --build-arg OPENJDK_TAG=11.0.13 --build-arg SBT_VERSION=1.6.2 --tag sonatype/nexus-iq-sbt:1.0.0 --tag sonatype/nexus-iq-sbt:latest .
 ```
