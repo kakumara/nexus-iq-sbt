@@ -21,3 +21,5 @@ The container can now access the host machine using 192.168.0.1 IP address. Here
 ```shell
 docker run -it --net=dockernet  sonatype/nexus-iq-sbt /app/nexus-iq-sbt.sh https://github.com/Kambius/simple-app.git http://192.168.0.1:8070/ scala-app admin admin123 build
 ```
+
+Note: the script uses default IQ username (admin), password (admin123) and stage (build) and if your local setup uses the same you can avoid passing them to the script   
