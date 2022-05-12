@@ -42,43 +42,10 @@ RUN mkdir -p /usr/share/maven /usr/share/maven/ref \
 ENV MAVEN_HOME /usr/share/maven
 ENV MAVEN_CONFIG "$USER_HOME_DIR/.m2"
 RUN mvn --version
+#install clm-maven-plugin
+RUN mvn org.apache.maven.plugins:maven-dependency-plugin:3.3.0:get -DartifactId=clm-maven-plugin -DgroupId=com.sonatype.clm -Dversion=2.30.6-01
 
-RUN printf "#!/bin/bash \
-    \n# Copyright (c) 2011-present Sonatype, Inc. All rights reserved. \
-    \n# Includes the third-party code listed at http://links.sonatype.com/products/clm/attributions. \
-    \n# \"Sonatype\" is a trademark of Sonatype, Inc. \
-    \nPROJECT_URL=\$1 \
-    \nIQ_URL=\$2 \
-    \nIQ_APP=\$3 \
-    \nIQ_USER=\${4:-admin} \
-    \nIQ_PASSWORD=\${5:-admin123} \
-    \nIQ_STAGE=\${5:-build} \
-    \ncurrent_dir=\$(pwd) \
-    \ntmp_dir=\$(mktemp -d -t iq-XXXXXXXXXX) \
-    \ncheckout_dir=\"scala_app\" \
-    \necho \"cloning project \$PROJECT_URL\" \
-    \ncd \$tmp_dir \
-    \necho \"evaluating nexus-iq-sbt in \$tmp_dir\" \
-    \ngit clone \"\$PROJECT_URL\" \$checkout_dir \
-    \ncd \$checkout_dir \
-    \nsbt_file=build.sbt \
-    \nif [ -f \"\$sbt_file\" ]; then \
-          \nsbt makePom \
-          \npomresult=(\`find ./target -maxdepth 2 -name \"*.pom\"\`) \
-          \nif [ \${#pomresult[@]} -gt 0 ]; then \
-              \npom_file=\${pomresult[0]} \
-              \necho \"generated pom file from sbt \$pom_file\" \
-              \ncp \$pom_file ./pom.xml \
-              \nmvn com.sonatype.clm:clm-maven-plugin:evaluate -Dclm.serverUrl=\"\$IQ_URL\" -Dclm.username=\$IQ_USER -Dclm.password=\$IQ_PASSWORD -Dclm.applicationId=\$IQ_APP -Dclm.stage=\$IQ_STAGE \
-          \nelse \
-              \necho \"could not retrieve the generated pom\" \
-          \nfi \
-      \nelse \
-          \necho \"\$sbt_file does not exist.\" \
-    \nfi \
-    \ncd \$current_dir \
-    \nrm -rf \$tmp_dir" > nexus-iq-sbt.sh
-
+COPY ./nexus-iq-sbt.sh /app/nexus-iq-sbt.sh
 RUN chmod +x nexus-iq-sbt.sh
 
 CMD ["mvn", "--version"]
